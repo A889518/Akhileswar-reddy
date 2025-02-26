@@ -1,0 +1,138 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+// Class definition for FlightTicket
+class FlightTicket {
+private:
+    string passengersName;
+    string flightNumber;
+    int seatNumber;
+    bool isBooked;
+
+public:
+    // Constructor to initialize the flight ticket object
+    FlightTicket(string name, string flight, int seat)
+        : passengersName(name), flightNumber(flight), seatNumber(seat), isBooked(false) {}
+
+    // Method to assign a seat and mark it as booked
+    void bookTicket() {
+        if (!isBooked) {
+            isBooked = true;
+            cout << "Ticket booked successfully for " << passengersName << " on Flight " << flightNumber 
+                 << " with Seat Number " << seatNumber << endl;
+        } else {
+            cout << "Ticket is already booked for " << passengersName << endl;
+        }
+    }
+
+    // Method to free up the seat (cancel the booking)
+    void cancelTicket() {
+        if (isBooked) {
+            isBooked = false;
+            cout << "Ticket canceled for " << passengersName << " on Flight " << flightNumber 
+                 << " with Seat Number " << seatNumber << endl;
+        } else {
+            cout << "No booking found to cancel for " << passengersName << endl;
+        }
+    }
+
+    // Method to display the ticket details (Passenger details)
+    void displayTicket() const {
+        cout << "Passenger Name: " << passengersName << endl;
+        cout << "Flight Number: " << flightNumber << endl;
+        cout << "Seat Number: " << seatNumber << endl;
+        cout << (isBooked ? "Status: Booked" : "Status: Available") << endl;
+    }
+
+    // Getter for seat number
+    int getSeatNumber() const {
+        return seatNumber;
+    }
+
+    // Getter for passenger name
+    string getPassengerName() const {
+        return passengersName;
+    }
+
+    // Getter to check if the ticket is booked
+    bool isTicketBooked() const {
+        return isBooked;
+    }
+};
+
+// Flight system class to manage multiple tickets
+class FlightSystem {
+private:
+    vector<FlightTicket> tickets;
+
+public:
+    // Function to add a ticket to the flight system
+    void addTicket(const FlightTicket &ticket) {
+        tickets.push_back(ticket);
+    }
+
+    // Function to book a ticket
+    void bookTicket(string name, string flight, int seat) {
+        for (auto &ticket : tickets) {
+            if (ticket.getSeatNumber() == seat && !ticket.isTicketBooked()) {
+                ticket.bookTicket();
+                return;
+            }
+        }
+        cout << "Seat " << seat << " is already booked or not available." << endl;
+    }
+
+    // Function to cancel a ticket
+    void cancelTicket(string name, string flight, int seat) {
+        for (auto &ticket : tickets) {
+            if (ticket.getSeatNumber() == seat && ticket.getPassengerName() == name && ticket.isTicketBooked()) {
+                ticket.cancelTicket();
+                return;
+            }
+        }
+        cout << "Ticket not found for cancellation." << endl;
+    }
+
+    // Function to display all tickets in the system
+    void displayAllTickets() const {
+        for (const auto &ticket : tickets) {
+            ticket.displayTicket();
+            cout << "-----------------------" << endl;
+        }
+    }
+};
+
+// Main function to test the system
+int main() {
+    FlightSystem system;
+
+    // Adding some tickets to the system
+    system.addTicket(FlightTicket("John Doe", "FL123", 1));
+    system.addTicket(FlightTicket("Jane Smith", "FL123", 2));
+    system.addTicket(FlightTicket("Emily Davis", "FL124", 1));
+
+    // Display all tickets initially
+    cout << "All Tickets in the System:" << endl;
+    system.displayAllTickets();
+
+    // Booking a ticket for John Doe
+    cout << "\nBooking Ticket for John Doe on Seat 1..." << endl;
+    system.bookTicket("John Doe", "FL123", 1);
+
+    // Trying to book the same seat again
+    cout << "\nTrying to book Seat 1 again..." << endl;
+    system.bookTicket("Jane Smith", "FL123", 1);
+
+    // Canceling a ticket for John Doe
+    cout << "\nCanceling Ticket for John Doe..." << endl;
+    system.cancelTicket("John Doe", "FL123", 1);
+
+    // Display all tickets after booking and canceling
+    cout << "\nUpdated Tickets in the System:" << endl;
+    system.displayAllTickets();
+
+    return 0;
+}
