@@ -1,0 +1,35 @@
+#include <iostream>
+using namespace std;
+
+class FitnessTracker {
+public:
+    // Function for Running: Distance in km, Time in minutes
+    double calculateSpeed(double distance, int time) {
+        return (time > 0) ? (distance / (time / 60.0)) : 0; // Speed in km/hr
+    }
+
+    // Function for Cycling: Distance in km, Time in hours
+    double calculateSpeed(double distance, double time) {
+        return (time > 0) ? (distance / time) : 0; // Speed in km/hr
+    }
+
+    // Function for Swimming: Distance in meters, Time in seconds
+    double calculateSpeed(int distance, int time) {
+        return (time > 0) ? (static_cast<double>(distance) / time) : 0; // Speed in m/s
+    }
+};
+
+int main() {
+    FitnessTracker tracker;
+
+    // Example usage
+    double runSpeed = tracker.calculateSpeed(10.0, 50); // Running: 10 km in 50 min
+    double cycleSpeed = tracker.calculateSpeed(20.0, 1.5); // Cycling: 20 km in 1.5 hr
+    double swimSpeed = tracker.calculateSpeed(500, 120); // Swimming: 500 m in 120 sec
+
+    cout << "Running Speed: " << runSpeed << " km/hr" << endl;
+    cout << "Cycling Speed: " << cycleSpeed << " km/hr" << endl;
+    cout << "Swimming Speed: " << swimSpeed << " m/s" << endl;
+
+    return 0;
+}
